@@ -7,3 +7,9 @@ Responsibilities:
     Designed and implemented the backend using Django, ensuring efficient handling of leases and user data.
     Created a responsive frontend with HTML,Tailwind CSS, and JavaScript for a seamless user experience.
     Handled user authentication and authorization to ensure data security.
+
+    
+
+
+https://github.com/user-attachments/assets/c9927370-30fd-4b04-9c96-265aca947cf7
+
