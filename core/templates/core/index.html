@@ -1,0 +1,170 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+<style>
+    main {
+  width: 100%;
+  height: 800px;
+  margin-top: 50px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.slide {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transition: transform 0.5s ease-in-out;
+  border-radius: 5px;
+}
+
+.nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.nav button {
+  font-size: 18px;
+  padding: 10px 20px;
+  border: none;
+  background-image: linear-gradient(to right, #ff4757, #ff6b81);
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.nav button:hover {
+  background-image: linear-gradient(to right, #ff6b81, #ff90a4);
+  transform: scale(1.1);
+}
+
+.navigation {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-between;
+}
+
+.dot {
+  border: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ccc;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.dot.active {
+  background-color: #ff4757;
+}
+</style>
+</head>
+<body>
+{% load static %}
+
+<main>
+    <img src="{% static 'core/images/AshokLeylands.jpg' %}" class="slide" alt="Ashok Leyland">
+    <img src="{% static 'core/images/mahindra_add.jpg' %}" class="slide" alt="Mahindra">
+    <img src="{% static 'core/images/Daimler-Truck-add.jpg' %}" class="slide" alt="Daimler Truck">
+    <img src="{% static 'core/images/tata_add.jpg' %}" class="slide" alt="Tata">
+    <div class="nav">
+        <button onclick="goPrev()">Prev</button>
+        <button onclick="goNext()">Next</button>
+    </div>
+</main>
+
+<script>
+   document.addEventListener('DOMContentLoaded', (event) => {
+  const slides = document.querySelectorAll(".slide");
+  const dots = document.querySelectorAll(".dot");
+  let counter = 0;
+
+  slides.forEach((slide, index) => {
+    slide.style.left = `${index * 100}%`;
+  });
+
+  const goPrev = () => {
+    counter = (counter > 0) ? counter - 1 : slides.length - 1;
+    slideImage();
+    updateDots(); // Added line to update dot selection
+  };
+
+  const goNext = () => {
+    counter = (counter < slides.length - 1) ? counter + 1 : 0;
+    slideImage();
+    updateDots(); // Added line to update dot selection
+  };
+
+  const slideImage = () => {
+    slides.forEach((slide) => {
+      slide.style.transform = `translateX(-${counter * 100}%)`;
+    });
+  };
+
+  const updateDots = () => {  // Added function to update dot selection
+    dots.forEach((dot, index) => {
+      dot.classList.remove("active"); // Remove active class from all dots
+      if (index === counter) {
+        dot.classList.add("active"); // Add active class to selected dot
+      }
+    });
+  };
+
+  window.goPrev = goPrev;
+  window.goNext = goNext;
+
+  updateDots(); // Call updateDots initially to set the first dot as active
+});
+
+
+</script>
+    <div class="mt-6 px-6 py-12 bg-orange-100 rounded-xl">
+        <h2 class="mb-12 text-2xl text-center">Newest items</h2>
+        <div class="grid grid-cols-3  gap-3">
+            {% for item in items %}
+                <div>
+                    <a href="{% url 'item:detail' item.id %}">
+                        <div>
+                            <img src="{{ item.image.url }}" class="rounded-t-xl">
+                        </div>
+                        <div class="p-6 bg-white rounded-b-xl">
+                            <h2 class="text-2xl">{{item.name }}</h2>
+                            <p class="text-gray-500">Price: {{item.price}}</p>
+                        </div>
+                    </a>
+                </div>
+        {% endfor %}
+        </div>
+    </div>
+    <div class="mt-6 px-6 py-12 bg-orange-100 rounded-xl">
+        <h2 class="mb-12 text-2xl text-center">Categories</h2>
+        <div class="grid grid-cols-3  gap-3">
+            {% for category in categories %}
+            <div class="p-6 bg-white rounded-b-xl">
+                <a href="#">
+                    {% if category.image %}
+                    <img src="{{ category.image.url }}" alt="{{ category.name }}" class="w-full object-cover rounded-t-xl">
+                    {% endif %}
+                    <h2 class="text-2xl mt-4">{{ category.name }}</h2>
+                    <p class="text-gray-500">{{ category.items.count }} items</p>
+                </a>
+            </div>
+        {% endfor %}
+        
+            </div>
+{% endblock %}
