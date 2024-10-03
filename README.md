@@ -8,6 +8,7 @@ Responsibilities:
     Created a responsive frontend with HTML,Tailwind CSS, and JavaScript for a seamless user experience.
     Handled user authentication and authorization to ensure data security.
 
+    HOSTED AT:saisireesh.pythonanywhere.com
     
 
 
